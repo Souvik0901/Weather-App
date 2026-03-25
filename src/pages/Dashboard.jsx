@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CityCard from "../components/CityCard";
+import SearchBar from "../components/SearchBar";
 import { fetchWeather } from "../services/weatherApi";
 
 function Dashboard() {
@@ -7,39 +8,80 @@ function Dashboard() {
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
-
-    loadWeather();
-
+    loadDefaultCities();
   }, []);
 
-  const loadWeather = async () => {
+  const loadDefaultCities = async () => {
 
     const kolkata = await fetchWeather("Kolkata");
-    const delhi = await fetchWeather("Delhi");
 
-    const formattedData = [
-
+    setCities([
       {
         name: kolkata.location.name,
         temp: kolkata.current.temp_c,
         condition: kolkata.current.condition.text,
         humidity: kolkata.current.humidity,
         wind: kolkata.current.wind_kph
-      },
-
-      {
-        name: delhi.location.name,
-        temp: delhi.current.temp_c,
-        condition: delhi.current.condition.text,
-        humidity: delhi.current.humidity,
-        wind: delhi.current.wind_kph
       }
-
-    ];
-
-    setCities(formattedData);
+    ]);
 
   };
+
+  // const handleSearch = async (cityName) => {
+
+  //   const data = await fetchWeather(cityName);
+
+  //   const newCity = {
+
+  //     name: data.location.name,
+  //     temp: data.current.temp_c,
+  //     condition: data.current.condition.text,
+  //     humidity: data.current.humidity,
+  //     wind: data.current.wind_kph
+
+  //   };
+
+  //   setCities(prev => [...prev, newCity]);
+
+  // };
+
+
+
+  const handleSearch = async (cityName) => {
+
+  // check duplicate city
+  const exists = cities.find(
+    c => c.name.toLowerCase() === cityName.toLowerCase()
+  );
+
+  if (exists) {
+    alert("City already added");
+    return;
+  }
+
+  try {
+
+    const data = await fetchWeather(cityName);
+
+    const newCity = {
+
+      name: data.location.name,
+      temp: data.current.temp_c,
+      condition: data.current.condition.text,
+      humidity: data.current.humidity,
+      wind: data.current.wind_kph
+
+    };
+
+    setCities(prev => [...prev, newCity]);
+
+  } catch (error) {
+
+    alert("City not found");
+
+  }
+
+};
 
   return (
 
@@ -47,15 +89,16 @@ function Dashboard() {
 
       <h1>Weather Dashboard</h1>
 
+      <SearchBar onSearch={handleSearch}/>
+
       <div style={{
         display: "flex",
-        gap: "20px"
+        gap: "20px",
+        flexWrap: "wrap"
       }}>
 
         {cities.map((city, index) => (
-
           <CityCard key={index} city={city}/>
-
         ))}
 
       </div>
