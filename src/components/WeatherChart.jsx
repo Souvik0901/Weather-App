@@ -5,60 +5,92 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid
+  CartesianGrid,
+  ResponsiveContainer
 
 } from "recharts";
 
+import { useSelector }
+from "react-redux";
+
 function WeatherChart({ type, data }) {
+
+  const unit =
+    useSelector(
+      state => state.weather.unit
+    );
 
   let chartData = [];
 
+  // 7 day data
   if(type === "daily") {
 
-    chartData = data.map(day => ({
-      date: day.date,
-      temp: day.day.avgtemp_c
-    }));
+    chartData =
+      data.map(day => ({
+
+        label: day.date,
+
+        temp:
+
+        unit === "C"
+
+        ? day.day.avgtemp_c
+
+        : (day.day.avgtemp_c * 9/5) + 32
+
+      }));
 
   }
 
+  // hourly data
   if(type === "hourly") {
 
-    chartData = data.map(hour => ({
-      time: hour.time,
-      temp: hour.temp_c
-    }));
+    chartData =
+      data.map(hour => ({
+
+        label:
+        hour.time.split(" ")[1],
+
+        temp:
+
+        unit === "C"
+
+        ? hour.temp_c
+
+        : (hour.temp_c * 9/5) + 32
+
+      }));
 
   }
 
   return (
 
-    <LineChart
-      width={500}
+    <ResponsiveContainer
+      width="100%"
       height={300}
-      data={chartData}
     >
 
-      <CartesianGrid />
+      <LineChart data={chartData}>
 
-      <XAxis
-        dataKey={
-          type === "daily"
-          ? "date"
-          : "time"
-        }
-      />
+        <CartesianGrid />
 
-      <YAxis />
+        <XAxis dataKey="label"/>
 
-      <Tooltip />
+        <YAxis/>
 
-      <Line
-        type="monotone"
-        dataKey="temp"
-      />
+        <Tooltip/>
 
-    </LineChart>
+        <Line
+
+          type="monotone"
+
+          dataKey="temp"
+
+        />
+
+      </LineChart>
+
+    </ResponsiveContainer>
 
   );
 

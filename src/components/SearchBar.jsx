@@ -15,20 +15,20 @@ function SearchBar({ onSearch }) {
 
   return (
 
-    <div style={{ marginBottom: "20px" }}>
+      <div className="search-box">
 
-      <input
-        type="text"
-        placeholder="Enter city name"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      />
+        <input
+          type="text"
+          placeholder="Search city..."
+          value={city}
+          onChange={(e)=>setCity(e.target.value)}
+        />
 
-      <button onClick={handleSearch}>
-        Search
-      </button>
+        <button onClick={handleSearch}>
+          Search
+        </button>
 
-    </div>
+      </div>
 
   );
 

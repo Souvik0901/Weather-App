@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
-import { fetchForecast } from "../services/weatherApi";
 
-import WeatherChart from "../components/WeatherChart";
+import { useSelector } from "react-redux";
+
+import { fetchForecast }
+from "../services/weatherApi";
+
+import WeatherChart
+from "../components/WeatherChart";
 
 function Details({ city, onBack }) {
+
+  const unit =
+    useSelector(
+      state => state.weather.unit
+    );
 
   const [forecast, setForecast] =
     useState(null);
@@ -23,7 +33,17 @@ function Details({ city, onBack }) {
 
   };
 
-  if(!forecast) return <p>Loading...</p>;
+  if(!forecast)
+
+    return (
+
+      <div className="container">
+
+        <p>Loading forecast...</p>
+
+      </div>
+
+    );
 
   const dailyData =
     forecast.forecast.forecastday;
@@ -31,54 +51,141 @@ function Details({ city, onBack }) {
   const hourlyData =
     forecast.forecast.forecastday[0].hour;
 
+  // unit conversion
+
+  const currentTemp =
+
+    unit === "C"
+
+    ? forecast.current.temp_c
+
+    : (forecast.current.temp_c * 9/5) + 32;
+
   return (
 
-    <div>
+    <div className="container">
 
-      <button onClick={onBack}>
-        Back
-      </button>
+      <div className="details-page">
 
-      <h2>{city.name} Details</h2>
+        <button
 
-      <h3>
-        Current Temp:
-        {forecast.current.temp_c}°C
-      </h3>
+          className="back-btn"
 
-      <p>
-        Condition:
-        {forecast.current.condition.text}
-      </p>
+          onClick={onBack}
 
-      <p>
-        Humidity:
-        {forecast.current.humidity}
-      </p>
+        >
 
-      <p>
-        Wind:
-        {forecast.current.wind_kph}
-      </p>
+          ← Back
 
-      <p>
-        UV:
-        {forecast.current.uv}
-      </p>
+        </button>
 
-      <h3>7 Day Forecast</h3>
+        <h2 className="page-title">
 
-      <WeatherChart
-        type="daily"
-        data={dailyData}
-      />
+          {city.name} Weather Details
 
-      <h3>Hourly Forecast</h3>
+        </h2>
 
-      <WeatherChart
-        type="hourly"
-        data={hourlyData}
-      />
+        <div className="weather-card">
+
+          <div className="temp">
+
+            {currentTemp.toFixed(1)}°{unit}
+
+          </div>
+
+          <div className="condition">
+
+            {
+
+              forecast.current
+
+              .condition.text
+
+            }
+
+          </div>
+
+          <div className="details">
+
+            Humidity:
+
+            {
+
+              forecast.current
+
+              .humidity
+
+            }%
+
+          </div>
+
+          <div className="details">
+
+            Wind:
+
+            {
+
+              forecast.current
+
+              .wind_kph
+
+            } km/h
+
+          </div>
+
+          <div className="details">
+
+            UV Index:
+
+            {
+
+              forecast.current
+
+              .uv
+
+            }
+
+          </div>
+
+        </div>
+
+        <h3 className="section-title">
+
+          7 Day Forecast
+
+        </h3>
+
+        <div className="chart-box">
+
+          <WeatherChart
+
+            type="daily"
+
+            data={dailyData}
+
+          />
+
+        </div>
+
+        <h3 className="section-title">
+
+          Hourly Forecast
+
+        </h3>
+
+        <div className="chart-box">
+
+          <WeatherChart
+
+            type="hourly"
+
+            data={hourlyData}
+
+          />
+
+        </div>
+
+      </div>
 
     </div>
 

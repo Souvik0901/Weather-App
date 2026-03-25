@@ -59,57 +59,84 @@ function Dashboard() {
 
   return (
 
-    <div>
+    <div className="container">
 
-      <h1>Weather Dashboard</h1>
+      <h1>
+        Weather Dashboard
+      </h1>
 
-      <SearchBar onSearch={handleSearch}/>
+      <SearchBar
+        onSearch={handleSearch}
+      />
+
+      {/* search result */}
 
       {searchResult && (
 
         <div>
 
-          <h3>Search Result</h3>
+          <h3 className="section-title">
+            Search Result
+          </h3>
 
-          <CityCard
+          <div className="card-container">
 
-            city={searchResult}
+            <CityCard
 
-            onClick={setSelectedCity}
+              city={searchResult}
 
-          />
+              onClick={setSelectedCity}
+
+            />
+
+          </div>
 
         </div>
 
       )}
 
-      <h3>Favorite Cities</h3>
+      {/* favorites */}
 
-      <div style={{
-        display: "flex",
-        gap: "20px",
-        flexWrap: "wrap"
-      }}>
+      <h3 className="section-title">
 
-        {favorites.map((city, index) => (
+        Favorite Cities
 
-          <CityCard
+      </h3>
 
-            key={index}
+      <div className="card-container">
 
-            city={city}
+        {favorites.length === 0 && (
 
-            onClick={setSelectedCity}
+          <p>
+            No favorite cities yet
+          </p>
 
-          />
+        )}
 
-        ))}
+        {favorites.map(
+
+          (city, index) => (
+
+            <CityCard
+
+              key={index}
+
+              city={city}
+
+              onClick={setSelectedCity}
+
+            />
+
+          )
+
+        )}
 
       </div>
 
     </div>
 
   );
+
 
 }
 
