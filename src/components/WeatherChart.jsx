@@ -1,5 +1,4 @@
 import {
-
   LineChart,
   Line,
   XAxis,
@@ -7,11 +6,9 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer
-
 } from "recharts";
 
-import { useSelector }
-from "react-redux";
+import { useSelector } from "react-redux";
 
 function WeatherChart({ type, data }) {
 
@@ -27,17 +24,8 @@ function WeatherChart({ type, data }) {
 
     chartData =
       data.map(day => ({
-
         label: day.date,
-
-        temp:
-
-        unit === "C"
-
-        ? day.day.avgtemp_c
-
-        : (day.day.avgtemp_c * 9/5) + 32
-
+        temp: unit === "C" ? day.day.avgtemp_c : (day.day.avgtemp_c * 9/5) + 32
       }));
 
   }
@@ -47,18 +35,8 @@ function WeatherChart({ type, data }) {
 
     chartData =
       data.map(hour => ({
-
-        label:
-        hour.time.split(" ")[1],
-
-        temp:
-
-        unit === "C"
-
-        ? hour.temp_c
-
-        : (hour.temp_c * 9/5) + 32
-
+        label: hour.time.split(" ")[1],
+        temp: unit === "C" ? hour.temp_c : (hour.temp_c * 9/5) + 32
       }));
 
   }
@@ -81,11 +59,8 @@ function WeatherChart({ type, data }) {
         <Tooltip/>
 
         <Line
-
           type="monotone"
-
           dataKey="temp"
-
         />
 
       </LineChart>

@@ -26,16 +26,14 @@ function CityCard({ city, onClick }) {
 
   const toggleFavorite = (e) => {
 
-    e.stopPropagation(); // prevent card click
+    e.stopPropagation(); 
 
     if(isFavorite) {
-
       dispatch(
         removeFavorite(city.name)
       );
 
     } else {
-
       dispatch(
         addFavorite(city)
       );
