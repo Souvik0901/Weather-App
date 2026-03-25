@@ -1,4 +1,26 @@
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite, removeFavorite } from "../redux/weatherSlice";
+
 function CityCard({ city }) {
+
+  const dispatch = useDispatch();
+
+  const favorites = useSelector(
+    state => state.weather.favorites
+  );
+
+  const isFavorite =
+    favorites.find(c => c.name === city.name);
+
+  const toggleFavorite = () => {
+
+    if(isFavorite) {
+      dispatch(removeFavorite(city.name));
+    } else {
+      dispatch(addFavorite(city));
+    }
+
+  };
 
   return (
 
@@ -18,6 +40,12 @@ function CityCard({ city }) {
       <p>Humidity: {city.humidity}%</p>
 
       <p>Wind: {city.wind} km/h</p>
+
+      <button onClick={toggleFavorite}>
+
+        {isFavorite ? "★ Favorited" : "☆ Favorite"}
+
+      </button>
 
     </div>
 
