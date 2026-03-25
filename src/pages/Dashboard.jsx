@@ -1,69 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+
 import CityCard from "../components/CityCard";
 import SearchBar from "../components/SearchBar";
 import { fetchWeather } from "../services/weatherApi";
 
 function Dashboard() {
 
-  const [cities, setCities] = useState([]);
+  const favorites =
+    useSelector(state => state.weather.favorites);
 
-  useEffect(() => {
-    loadDefaultCities();
-  }, []);
-
-  const loadDefaultCities = async () => {
-
-    const kolkata = await fetchWeather("Kolkata");
-
-    setCities([
-      {
-        name: kolkata.location.name,
-        temp: kolkata.current.temp_c,
-        condition: kolkata.current.condition.text,
-        humidity: kolkata.current.humidity,
-        wind: kolkata.current.wind_kph
-      }
-    ]);
-
-  };
-
-  // const handleSearch = async (cityName) => {
-
-  //   const data = await fetchWeather(cityName);
-
-  //   const newCity = {
-
-  //     name: data.location.name,
-  //     temp: data.current.temp_c,
-  //     condition: data.current.condition.text,
-  //     humidity: data.current.humidity,
-  //     wind: data.current.wind_kph
-
-  //   };
-
-  //   setCities(prev => [...prev, newCity]);
-
-  // };
-
-
+  const [searchResult, setSearchResult] =
+    useState(null);
 
   const handleSearch = async (cityName) => {
 
-  // check duplicate city
-  const exists = cities.find(
-    c => c.name.toLowerCase() === cityName.toLowerCase()
-  );
-
-  if (exists) {
-    alert("City already added");
-    return;
-  }
-
-  try {
-
     const data = await fetchWeather(cityName);
 
-    const newCity = {
+    const formatted = {
 
       name: data.location.name,
       temp: data.current.temp_c,
@@ -73,15 +27,9 @@ function Dashboard() {
 
     };
 
-    setCities(prev => [...prev, newCity]);
+    setSearchResult(formatted);
 
-  } catch (error) {
-
-    alert("City not found");
-
-  }
-
-};
+  };
 
   return (
 
@@ -91,14 +39,37 @@ function Dashboard() {
 
       <SearchBar onSearch={handleSearch}/>
 
+      {/* search result (only one) */}
+
+      {searchResult && (
+
+        <div>
+
+          <h3>Search Result</h3>
+
+          <CityCard city={searchResult}/>
+
+        </div>
+
+      )}
+
+      {/* favorites */}
+
+      <h3>Favorite Cities</h3>
+
       <div style={{
         display: "flex",
         gap: "20px",
         flexWrap: "wrap"
       }}>
 
-        {cities.map((city, index) => (
-          <CityCard key={index} city={city}/>
+        {favorites.map((city, index) => (
+
+          <CityCard
+            key={index}
+            city={city}
+          />
+
         ))}
 
       </div>
