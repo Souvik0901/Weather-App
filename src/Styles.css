@@ -220,3 +220,89 @@ h1 {
 
   letter-spacing: 1px;
 }
+
+
+@media (max-width: 992px) {
+
+  .container {
+    padding: 20px;
+
+  }
+
+  .card-container {
+
+    justify-content: center;
+
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  h1 {
+    font-size: 24px;
+
+  }
+
+  .page-title {
+    font-size: 22px;
+
+  }
+
+  .search-box {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-box input {
+    width: 90%;
+
+  }
+
+  .search-box button {
+    width: 95%;
+
+  }
+
+  .card-container {
+    flex-direction: column;
+    align-items: center;
+
+  }
+
+  .weather-card {
+    width: 90%;
+
+  }
+
+  .unit-toggle {
+    flex-direction: row;
+
+  }
+
+  .details-page {
+    padding: 15px;
+
+  }
+
+  .chart-box {
+    padding: 10px;
+
+  }
+
+}
+
+
+
+@media (max-width: 400px) {
+  .weather-card {
+    padding: 15px;
+  }
+
+  .temp {
+    font-size: 22px;
+
+  }
+
+}
