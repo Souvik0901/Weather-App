@@ -1,7 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { addFavorite, removeFavorite } from "../redux/weatherSlice";
+import { useDispatch, useSelector }
+from "react-redux";
 
-function CityCard({ city }) {
+import {
+  addFavorite,
+  removeFavorite
+}
+from "../redux/weatherSlice";
+
+function CityCard({ city, onClick }) {
 
   const dispatch = useDispatch();
 
@@ -10,26 +16,46 @@ function CityCard({ city }) {
   );
 
   const isFavorite =
-    favorites.find(c => c.name === city.name);
+    favorites.find(
+      c => c.name === city.name
+    );
 
-  const toggleFavorite = () => {
+  const toggleFavorite = (e) => {
+
+    e.stopPropagation(); // prevent card click
 
     if(isFavorite) {
-      dispatch(removeFavorite(city.name));
+
+      dispatch(
+        removeFavorite(city.name)
+      );
+
     } else {
-      dispatch(addFavorite(city));
+
+      dispatch(
+        addFavorite(city)
+      );
+
     }
 
   };
 
   return (
 
-    <div style={{
-      border: "1px solid gray",
-      padding: "15px",
-      width: "200px",
-      borderRadius: "10px"
-    }}>
+    <div
+
+      onClick={() =>
+        onClick && onClick(city)
+      }
+
+      style={{
+        border: "1px solid gray",
+        padding: "15px",
+        width: "200px",
+        borderRadius: "10px",
+        cursor: "pointer"
+      }}
+    >
 
       <h2>{city.name}</h2>
 
@@ -37,13 +63,21 @@ function CityCard({ city }) {
 
       <p>{city.condition}</p>
 
-      <p>Humidity: {city.humidity}%</p>
+      <p>
+        Humidity:
+        {city.humidity}%
+      </p>
 
-      <p>Wind: {city.wind} km/h</p>
+      <p>
+        Wind:
+        {city.wind} km/h
+      </p>
 
       <button onClick={toggleFavorite}>
 
-        {isFavorite ? "★ Favorited" : "☆ Favorite"}
+        {isFavorite
+          ? "★ Favorited"
+          : "☆ Favorite"}
 
       </button>
 
