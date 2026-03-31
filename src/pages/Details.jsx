@@ -12,11 +12,11 @@ function Details({ city, onBack }) {
   const loadForecast = useCallback(async () => {
     const data = await fetchForecast(city.name);
     setForecast(data);
-  }, [city.name]); // ✅ depends on city.name
+  }, [city.name]); 
 
   useEffect(() => {
     loadForecast();
-  }, [loadForecast]); // ✅ now safe to include
+  }, [loadForecast]); 
 
   if (!forecast)
     return (
